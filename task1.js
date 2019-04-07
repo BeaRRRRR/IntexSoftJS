@@ -1,4 +1,8 @@
 function isTimeValid(hours, minutes) {
-  let time = hours * 60 + minutes;
-  return time <= 1440;
+  if(hours===24){
+    return minutes===0;
+  }
+  else {
+    return hours<24 && minutes<60
+  }
 }
