@@ -13,7 +13,7 @@ function isPointInQuadrangle(x, y) {
     return y2 >= y && y >= y1;
   }
   if (-8.615 <= x && x <= -5.25) {
-    y1 = (3 * x - 24) / 2;
+    y1 = (-3 * x - 24) / 2;
     y2 = (4 * x + 28) / 7;
     return y2 >= y && y >= y1;
   }
