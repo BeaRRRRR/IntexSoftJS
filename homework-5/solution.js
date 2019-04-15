@@ -43,9 +43,10 @@ function remove(args) {
   if (!addresses.some((item) => item.phoneNumbers.includes(phone))) return false;
   addresses
     .filter((item) => item.phoneNumbers.includes(phone))
-    .forEach((item, index) => item.phoneNumbers.splice(index, 1));
+    .forEach((item) => {
+      item.phoneNumbers.splice(item.phoneNumbers.indexOf(phone), 1)
+    });
   return true;
-
 }
 
 module.exports = {
