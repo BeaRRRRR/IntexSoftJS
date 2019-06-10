@@ -1,0 +1,41 @@
+
+#figures div {
+    display: inline-block;
+}
+
+.circle {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid #000;
+    margin: 9px;
+    display: inline-block;
+}
+
+.square {
+    height: 42px;
+    width: 42px;
+    border: 1px solid #000;
+    margin: 9px;
+    display: inline-block;
+}
+
+.strangeFigureRight {
+    height: 42px;
+    width: 42px;
+    margin: 9px;
+    border: 1px solid #000;
+    display: inline-block;
+    border-bottom-right-radius: 40%;
+    border-top-left-radius: 40%;
+}
+
+.strangeFigureLeft {
+    height: 42px;
+    width: 42px;
+    margin: 9px;
+    border: 1px solid #000;
+    display: inline-block;
+    border-bottom-left-radius: 40%;
+    border-top-right-radius: 40%;
+}
