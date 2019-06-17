@@ -22,7 +22,6 @@ reset.addEventListener('click',function(){
 
 Array.prototype.forEach.call(figures,figure => figure.addEventListener('click',function () {
   selectedFigure = figure.className;
-  console.log(selectedFigure);
 }));
 
 

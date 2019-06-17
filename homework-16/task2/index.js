@@ -1,8 +1,9 @@
-let contentArea = document.getElementById('contentArea');
+const contentArea = document.getElementById('contentArea');
 contentArea.innerHTML = '<table class="chess"> <tr> <td><img src="images/pawn.png" id="pawn" draggable="true"></td> <td><img src="images/bishop.png" id="bishop"></td> <td><img src="images/knight.png" id="knight"></td> </tr> <tr> <td><img src="images/rook.png" id="rook"></td> <td><img src="images/queen.png" id="queen"></td> <td><img src="images/king.png" id="king"></td> </tr> </table> <table id="chessTable" class="chessboard"> <tr class="chessboard"> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> </tr> <tr class="chessboard"> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> </tr> <tr class="chessboard"> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> </tr> <tr class="chessboard"> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> </tr> <tr class="chessboard"> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> </tr> <tr class="chessboard"> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> </tr> <tr class="chessboard"> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> </tr> <tr class="chessboard"> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> <td class="chessboard"></td> </tr> </table>';
 const chessFigures = document.getElementsByClassName('chess')[0].getElementsByTagName('img');
+const chessFiguresTable = document.getElementsByClassName('chess')[0];
 const chessCells = document.getElementById('chessTable').getElementsByTagName('td');
-let chessTable = document.getElementById('chessTable').firstElementChild;
+const chessTable = document.getElementById('chessTable').firstElementChild;
 let selected;
 let selectedCell;
 
@@ -10,20 +11,12 @@ function clearField() {
   Array.prototype.forEach.call(chessCells, cell => cell.removeAttribute('style'));
 }
 
-Array.prototype.forEach.call(chessFigures, figure => {
-  figure.addEventListener('click', function () {
-    selected = figure.id;
-    console.log(figure.id);
-  });
-  figure.addEventListener('dragstart', function () {
-    selected = figure.id;
-    console.log(figure.id);
-  });
-});
-let showMoves = function (cell) {
-  if(!selected) return;
+let showMoves = function (event,cell) {
+  if(event) {
+    if (!selected || event.target.tagName != 'TD') return;
+  }
   clearField();
-  selectedCell = cell;
+  selectedCell = event ? event.target : cell;
   if (selected === 'pawn') {
     if (chessTable.children[selectedCell.parentElement.rowIndex - 1]) {
       chessTable.children[selectedCell.parentElement.rowIndex - 1].children[selectedCell.cellIndex].style = 'background-color : green;background-image : url(images/pawn.png);background-repeat : no-repeat;background-position: center';
@@ -115,37 +108,48 @@ let showMoves = function (cell) {
   }
   selectedCell.style = 'background-color : red';
 };
-
-Array.prototype.forEach.call(chessCells, function (cell) {
-  cell.addEventListener('click', function () {
-    //debugger;
-    showMoves(cell);
-  });
-  cell.addEventListener('drop', function() {
-    debugger;
-    showMoves(cell);
-  });
-  cell.addEventListener('dragover', function (event) {
-    event.preventDefault();
-  });
-  cell.addEventListener('dragenter', function (event) {
-    event.preventDefault();
-  });
+chessFiguresTable.addEventListener('click', function (event) {
+  let target = event.target;
+  if (target.tagName == 'IMG') {
+    selected = target.id;
+  }
 });
+
+
+chessFiguresTable.addEventListener('dragstart', function (event) {
+  let target = event.target;
+  if (target.tagName == 'IMG') {
+    selected = target.id;
+  }
+});
+
+chessTable.addEventListener('click',function(event){
+  showMoves(event)
+});
+chessTable.addEventListener('drop',function (event) {
+  event.preventDefault();
+  showMoves(event)
+});
+chessTable.addEventListener('dragover',function (event) {
+  event.preventDefault();
+});
+chessTable.addEventListener('dragenter',function (event) {
+  event.preventDefault();
+});
+
+
 document.addEventListener('keyup', function (event) {
   event.preventDefault();
-  debugger;
   if (event.code === 'ArrowUp') {
-    console.log(selectedCell);
-    showMoves(chessTable.children[selectedCell.parentElement.rowIndex - 1].children[selectedCell.cellIndex]);
+    showMoves(undefined,chessTable.children[selectedCell.parentElement.rowIndex - 1].children[selectedCell.cellIndex]);
   }
   if (event.code === 'ArrowDown') {
-    showMoves(chessTable.children[selectedCell.parentElement.rowIndex + 1].children[selectedCell.cellIndex]);
+    showMoves(undefined,chessTable.children[selectedCell.parentElement.rowIndex + 1].children[selectedCell.cellIndex]);
   }
   if (event.code === 'ArrowLeft') {
-    showMoves(chessTable.children[selectedCell.parentElement.rowIndex].children[selectedCell.cellIndex - 1]);
+    showMoves(undefined,chessTable.children[selectedCell.parentElement.rowIndex].children[selectedCell.cellIndex - 1]);
   }
   if (event.code === 'ArrowRight') {
-    showMoves(chessTable.children[selectedCell.parentElement.rowIndex].children[selectedCell.cellIndex + 1]);
+    showMoves(undefined, chessTable.children[selectedCell.parentElement.rowIndex].children[selectedCell.cellIndex + 1]);
   }
 });
